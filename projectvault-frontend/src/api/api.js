@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://abhimotions.onrender.com/",
+  baseURL: "https://abhimotions.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {

@@ -112,7 +112,7 @@ const { scrollYProgress } = useScroll({
  {/* HERO */}
  <div id="home" className="hero">
  <div className="hero-left">
- <h1>ABHI<br/>EDITZ</h1>
+ <h1>ABHI<br/>MOTIONS</h1>
  </div>
 
  <div className="hero-right">

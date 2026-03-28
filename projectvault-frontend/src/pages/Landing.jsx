@@ -144,11 +144,9 @@ const { scrollYProgress } = useScroll({
 
   {/* RIGHT SIDE */}
   <div className="why-right">
-    <h2>
-  <span className="why-word">WHY</span><br />
-  ABHI MOTIONS
-</h2>
-  </div>
+  <h2 className="why-title">WHY</h2>
+  <h3 className="why-brand">ABHI MOTIONS</h3>
+</div>
 
 </section>
 

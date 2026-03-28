@@ -262,7 +262,20 @@ html {
   gap: 60px;
   color: white;
 }
+.why-left p {
+  font-size: 18px;
+  color: #aaa;
+  margin-bottom: 20px;
+  position: relative;
+  padding-left: 20px;
+}
 
+.why-left p::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
 .why-section {
   display: flex;
   justify-content: space-between;
@@ -282,14 +295,28 @@ html {
   --accent: #f4d3a9;
 }
 .why-right {
-  flex: 1;
   position: sticky;
-  top: 30%;
-  height: fit-content;
-  color: var(--accent);
+  flex-direction: column;
+  align-items: flex-end;
   display: flex;
-  justify-content: flex-end; /* pushes content to right */
-  text-shadow: 0 0 10px rgba(161, 122, 71, 0.4);
+  justify-content: center; /* pushes content to right */
+}
+
+.why-title {
+  font-size: 48px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 5px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* ABHI MOTIONS */
+.why-brand {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .why-text {

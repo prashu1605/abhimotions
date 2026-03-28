@@ -286,7 +286,7 @@ html {
 }
 
 .why-right h2 {
-  font-size: clamp(60px, 9vw, 110px);
+  font-size: clamp(50px, 9vw, 100px);
   line-height: 1.1;
 }
 

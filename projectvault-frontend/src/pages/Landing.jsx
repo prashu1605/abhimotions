@@ -23,7 +23,21 @@ export default function Landing() {
  .catch(() => setFeatured([]));
  }, []);
 
+const reasons = [
+  "Real-world systems, not tutorials.",
+  "Production architecture, not toy apps.",
+  "Built to help you learn faster."
+];
 
+const [index, setIndex] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setIndex((prev) => (prev + 1) % reasons.length);
+  }, 2500);
+
+  return () => clearInterval(interval);
+}, []);
 
  /* 👇 THIS controls scroll trigger */
  const whyRef = useRef(null);
@@ -125,9 +139,7 @@ const { scrollYProgress } = useScroll({
 
   {/* LEFT SIDE */}
   <div className="why-left">
-    <p className="why-item">Real-world systems, not tutorials.</p>
-    <p className="why-item">Production architecture, not toy apps.</p>
-    <p className="why-item">Built to help you learn faster.</p>
+    <p className="why-text">{reasons[index]}</p>
   </div>
 
   {/* RIGHT SIDE */}

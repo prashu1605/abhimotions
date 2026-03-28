@@ -75,11 +75,11 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+   const token = jwt.sign(
+  { id: user._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
     res.json({ token, role: user.role, });
   } catch (err) {
@@ -103,7 +103,7 @@ router.post("/send-otp", async (req, res) => {
     service: "gmail",
    auth: {
   user: "abhimotions@gmail.com",
-  pass: "muxn vkzj yhah wysl",
+  pass: "bcpf crlc nukz fixe",
 },
   });
 

@@ -55,7 +55,10 @@ export default function Projects() {
       setOrderId(res.data._id);
       setActiveProjectId(projectId);
     } catch (err) {
-      alert(err.response?.data?.message || "Error");
+      console.log("FULL ERROR:", err);
+console.log("RESPONSE:", err.response);
+
+alert(err.response?.data?.message || JSON.stringify(err.response?.data));
     } finally {
       setLoadingBuyId(null);
     }

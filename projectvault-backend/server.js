@@ -29,7 +29,7 @@ app.use("/api/orders", orderRoutes);
 const downloadRoutes = require("./routes/downloadRoutes");
 app.use("/api/download", downloadRoutes);
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("ProjectVault Backend Running");
 });
 

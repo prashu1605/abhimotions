@@ -55,9 +55,11 @@ const { scrollYProgress } = useScroll({
  offset: ["start end", "end start"]
 });
 
+const role = localStorage.getItem("role");
+const isAdmin = role === "admin";
+
  return (
 
-  
  <div className="bg-bg text-white">
  
 <div
@@ -84,9 +86,15 @@ const { scrollYProgress } = useScroll({
 
   {isLogged && (
     <>
-      <button onClick={() => (window.location.href = "/my-orders")}>
-        My Orders
-      </button>
+      {isAdmin ? (
+  <button onClick={() => (window.location.href = "/admin")}>
+    Verify Orders
+  </button>
+) : (
+  <button onClick={() => (window.location.href = "/my-orders")}>
+    My Orders
+  </button>
+)}
 
       <button
         className="logout-btn"

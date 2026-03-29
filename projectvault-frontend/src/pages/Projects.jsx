@@ -82,6 +82,18 @@ alert(err.response?.data?.message || JSON.stringify(err.response?.data));
     }
   };
 
+  const handleDelete = async (orderId) => {
+  try {
+    await api.delete(`/orders/${orderId}`);
+
+    alert("Order deleted");
+
+    fetchOrders(); // refresh UI
+  } catch (err) {
+    alert(err.response?.data?.message || "Delete failed");
+  }
+};
+
   const handleDownload = async (projectId, title) => {
     if (!isLogged) {
       window.location.href = "/login";
@@ -189,6 +201,18 @@ alert(err.response?.data?.message || JSON.stringify(err.response?.data));
                       {order.status}
                     </span>
                   )}
+
+                  {isLogged &&
+  order &&
+  (order.status === "PENDING" ||
+    order.status === "PENDING_VERIFICATION") && (
+    <button
+      style={{ marginTop: "10px", background: "red", color: "white" }}
+      onClick={() => handleDelete(order._id)}
+    >
+      Delete Order
+    </button>
+)}
 
                   {/* REJECT MESSAGE */}
                   {order?.status === "REJECTED" && (

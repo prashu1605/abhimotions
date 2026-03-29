@@ -21,7 +21,7 @@ const projectRoutes = require("./routes/projectRoutes");
 app.use("/api/projects", projectRoutes);
 
 const manualPaymentRoutes = require("./routes/manualPaymentRoutes");
-app.use("/api/manual", manualPaymentRoutes);
+app.use("/api/manual-payment", manualPaymentRoutes);
 
 const orderRoutes = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoutes);

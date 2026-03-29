@@ -6,7 +6,7 @@ import Projects from "./pages/Projects";
 import AdminOrders from "./pages/AdminOrders";
 import AdminRoute from "./components/AdminRoute";
 import MyOrders from "./pages/MyOrders";
-
+import Suggest from "./pages/Suggest";
 
 function App() {
   return (
@@ -17,11 +17,11 @@ function App() {
       <Route path="/register" element={<Register />} />
 
       <Route path="/" element={<Landing />} />
-<Route path="/projects" element={<Projects />} />
+      <Route path="/projects" element={<Projects />} />
 
       <Route path="/admin/orders" element={<AdminRoute> <AdminOrders /> </AdminRoute>} />
-    
-       <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/suggest" element={<Suggest />} />
+      <Route path="/my-orders" element={<MyOrders />} />
     </Routes>
   );
 }

@@ -7,6 +7,7 @@ import api from "../api/api";
 import { useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FaUserCircle, FaFolderOpen, FaCommentDots, FaEnvelope } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp, FaYoutube } from "react-icons/fa";
 
 const fadeUp = {
  hidden: { opacity: 0, y: 40 },
@@ -110,13 +111,13 @@ const { scrollYProgress } = useScroll({
   {/* SUGGESTIONS */}
   <div className="menu-item">
     <FaCommentDots className="icon" />
-    <a href="/suggest">Suggestions</a>
+    <Link to="/suggest">Suggestions</Link>
   </div>
 
   {/* CONTACT */}
   <div className="menu-item">
     <FaEnvelope className="icon" />
-    <a href="/contact">Contact Us</a>
+    <a href="mailto:srivastavabhishek267@gmail.com?subject=Project Suggestion&body=Hi, I want to suggest...">Contact Us</a>
   </div>
 
 </div>
@@ -144,9 +145,8 @@ const { scrollYProgress } = useScroll({
 
   {/* RIGHT SIDE */}
   <div className="why-right">
-    <h2>
-  <span className="why-word">WHY</span><br />
-  ABHI MOTIONS
+    <h2>WHY ABHI<br />
+   <span className="why-word">MOTIONS</span>
 </h2>
   </div>
 
@@ -192,10 +192,25 @@ const { scrollYProgress } = useScroll({
     <h3>Connect with me</h3>
 
     <div className="contact-links">
-      <a href="#">INSTAGRAM</a>
-      <a href="#">FACEBOOK</a>
-      <a href="#">PINTEREST</a>
-    </div>
+
+  
+  <a href="https://instagram.com/yourusername" target="_blank">
+    <FaInstagram /> INSTAGRAM
+  </a>
+
+  <a href="https://wa.me/91XXXXXXXXXX" target="_blank">
+    <FaWhatsapp /> WHATSAPP
+  </a>
+
+  <a href="mailto:yourmail@gmail.com">
+    <FaEnvelope /> EMAIL
+  </a>
+
+  <a href="https://youtube.com/@yourchannel" target="_blank">
+    <FaYoutube /> YOUTUBE
+  </a>
+
+</div>
   </div>
 
   <p className="contact-bottom">

@@ -3,7 +3,8 @@ import api from "../api/api";
 
 export default function Projects() {
   const isLogged = !!localStorage.getItem("token");
-
+  const [orderId, setOrderId] = useState(null);
+  const [utr, setUtr] = useState("");
   const [projects, setProjects] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loadingBuyId, setLoadingBuyId] = useState(null);
@@ -37,27 +38,40 @@ export default function Projects() {
 
   // 🔥 LOGIN CHECK + BUY
   const isLoggedIn = () => !!localStorage.getItem("token");
+const handleBuy = async () => {
 
-const handleBuyClick = async (projectId) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
+  if (!isLoggedIn()) {
+    alert("Please login first");
     window.location.href = "/login";
-    return; // 🔥 THIS LINE WAS MISSING
+    return;
   }
 
   try {
-    setLoadingBuyId(projectId);
-    await api.post("/manual/create-order", { projectId });
-    alert("Order created");
-    fetchOrders();
+    const res = await api.post("/manual-payment/create-order", {
+      projectId: project._id,
+    });
+
+    setOrderId(res.data._id);
+
   } catch (err) {
-    alert(err.response?.data?.message || "Error creating order");
-  } finally {
-    setLoadingBuyId(null);
+    alert(err.response?.data?.message || "Error");
   }
 };
 
+
+const submitUTR = async () => {
+  try {
+    await api.post(`/manual-payment/submit-utr/${orderId}`, {
+      utr,
+    });
+
+    alert("Payment submitted for verification");
+    setOrderId(null);
+    setUtr("");
+  } catch (err) {
+    alert("Error submitting UTR");
+  }
+};
   const handleDownload = async (projectId, title) => {
     if (!localStorage.getItem("token")) {
     window.location.href = "/login";
@@ -113,7 +127,7 @@ const handleBuyClick = async (projectId) => {
                   {isLogged && (!order || order.status === "REJECTED") && (
                     <button
                       disabled={loadingBuyId === p._id}
-                      onClick={() => handleBuyClick(p._id)}
+                      onClick={() => handleBuy(p._id)}
                     >
                       {loadingBuyId === p._id
                         ? "Processing..."
@@ -122,6 +136,29 @@ const handleBuyClick = async (projectId) => {
                         : "Buy"}
                     </button>
                   )}
+                  {orderId && (
+  <div style={{ marginTop: "20px" }}>
+    <h3>Complete Payment</h3>
+
+    <p>Send payment to UPI:</p>
+    <b>yourupi@okaxis</b>
+
+    <br /><br />
+
+    <input
+      type="text"
+      placeholder="Enter UTR number"
+      value={utr}
+      onChange={(e) => setUtr(e.target.value)}
+    />
+
+    <br /><br />
+
+    <button onClick={submitUTR}>
+      Submit Payment
+    </button>
+  </div>
+)}
 
                   {/* DOWNLOAD */}
                  {isLogged && order?.status === "PAID" && (

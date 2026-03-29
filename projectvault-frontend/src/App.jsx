@@ -20,8 +20,9 @@ function App() {
       <Route path="/projects" element={<Projects />} />
 
       <Route path="/admin/orders" element={<AdminRoute> <AdminOrders /> </AdminRoute>} />
-      <Route path="/suggest" element={<Suggest />} />
+     
       <Route path="/my-orders" element={<MyOrders />} />
+       <Route path="/suggest" element={<Suggest />} />
     </Routes>
   );
 }

@@ -92,4 +92,31 @@ router.post(
   }
 );
 
+// DELETE ORDER (only if not paid)
+router.delete("/:orderId", authMiddleware, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Only allow same user
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // Prevent deleting paid orders
+    if (order.status === "PAID") {
+      return res.status(400).json({ message: "Cannot delete paid order" });
+    }
+
+    await order.deleteOne();
+
+    res.json({ message: "Order deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Delete failed" });
+  }
+});
+
 module.exports = router;

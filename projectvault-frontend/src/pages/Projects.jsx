@@ -3,20 +3,24 @@ import api from "../api/api";
 
 export default function Projects() {
   const isLogged = !!localStorage.getItem("token");
-  const [orderId, setOrderId] = useState(null);
-  const [utr, setUtr] = useState("");
+
   const [projects, setProjects] = useState([]);
   const [orders, setOrders] = useState([]);
+
+  const [orderId, setOrderId] = useState(null);
+  const [activeProjectId, setActiveProjectId] = useState(null);
+  const [utr, setUtr] = useState("");
+
   const [loadingBuyId, setLoadingBuyId] = useState(null);
   const [loadingDownloadId, setLoadingDownloadId] = useState(null);
 
   useEffect(() => {
-  fetchProjects();
+    fetchProjects();
 
-  if (localStorage.getItem("token")) {
-    fetchOrders();
-  }
-}, []);
+    if (isLogged) {
+      fetchOrders();
+    }
+  }, []);
 
   const fetchProjects = async () => {
     const res = await api.get("/projects");
@@ -27,56 +31,60 @@ export default function Projects() {
     try {
       const res = await api.get("/orders/my");
       setOrders(res.data);
-    } catch {
-      // not logged in — ignore
-    }
+    } catch {}
   };
 
   const getOrderForProject = (projectId) => {
     return orders.find((o) => o.project?._id === projectId);
   };
 
-  // 🔥 LOGIN CHECK + BUY
-  const isLoggedIn = () => !!localStorage.getItem("token");
-const handleBuy = async () => {
-console.log("BUY CLICKED"); 
-  if (!isLoggedIn()) {
-    alert("Please login first");
-    window.location.href = "/login";
-    return;
-  }
+  const handleBuy = async (projectId) => {
+    if (!isLogged) {
+      alert("Please login first");
+      window.location.href = "/login";
+      return;
+    }
 
-  try {
-    const res = await api.post("/manual-payment/create-order", {
-      projectId: project._id,
-    });
+    try {
+      setLoadingBuyId(projectId);
 
-    setOrderId(res.data._id);
+      const res = await api.post("/manual-payment/create-order", {
+        projectId,
+      });
 
-  } catch (err) {
-    alert(err.response?.data?.message || "Error");
-  }
-};
+      setOrderId(res.data._id);
+      setActiveProjectId(projectId);
+    } catch (err) {
+      alert(err.response?.data?.message || "Error");
+    } finally {
+      setLoadingBuyId(null);
+    }
+  };
 
+  const submitUTR = async () => {
+    try {
+      await api.post(`/manual-payment/submit-utr/${orderId}`, {
+        utr,
+      });
 
-const submitUTR = async () => {
-  try {
-    await api.post(`/manual-payment/submit-utr/${orderId}`, {
-      utr,
-    });
+      alert("Payment submitted for verification");
 
-    alert("Payment submitted for verification");
-    setOrderId(null);
-    setUtr("");
-  } catch (err) {
-    alert("Error submitting UTR");
-  }
-};
+      setOrderId(null);
+      setActiveProjectId(null);
+      setUtr("");
+
+      fetchOrders(); // refresh status
+    } catch (err) {
+      alert("Error submitting UTR");
+    }
+  };
+
   const handleDownload = async (projectId, title) => {
-    if (!localStorage.getItem("token")) {
-    window.location.href = "/login";
-    return;
-  }
+    if (!isLogged) {
+      window.location.href = "/login";
+      return;
+    }
+
     try {
       setLoadingDownloadId(projectId);
 
@@ -99,36 +107,32 @@ const submitUTR = async () => {
 
   return (
     <div className="projects-page">
-
       <div className="projects-header">
         <h1>Explore Projects</h1>
         <p>Production-ready systems you can actually use.</p>
       </div>
 
       <div className="projects-grid">
-
         {projects.map((p) => {
           const order = getOrderForProject(p._id);
 
           return (
             <div key={p._id} className="project-card-main">
-
               <img src="https://picsum.photos/500/300" alt="" />
 
               <div className="project-content-main">
                 <h3>{p.title}</h3>
                 <p>{p.description}</p>
-
                 <strong>₹{p.price}</strong>
 
                 <div className="project-actions">
 
-                  {/* BUY / BUY AGAIN */}
+                  {/* BUY */}
                   {isLogged && (!order || order.status === "REJECTED") && (
                     <button
                       disabled={loadingBuyId === p._id}
                       onClick={() => handleBuy(p._id)}
-                    >buy
+                    >
                       {loadingBuyId === p._id
                         ? "Processing..."
                         : order?.status === "REJECTED"
@@ -136,32 +140,34 @@ const submitUTR = async () => {
                         : "Buy"}
                     </button>
                   )}
-                  {orderId && (
-  <div style={{ marginTop: "20px" }}>
-    <h3>Complete Payment</h3>
 
-    <p>Send payment to UPI:</p>
-    <b>yourupi@okaxis</b>
+                  {/* PAYMENT BOX */}
+                  {orderId && activeProjectId === p._id && (
+                    <div style={{ marginTop: "20px" }}>
+                      <h3>Complete Payment</h3>
 
-    <br /><br />
+                      <p>Send payment to UPI:</p>
+                      <b>yourupi@okaxis</b>
 
-    <input
-      type="text"
-      placeholder="Enter UTR number"
-      value={utr}
-      onChange={(e) => setUtr(e.target.value)}
-    />
+                      <br /><br />
 
-    <br /><br />
+                      <input
+                        type="text"
+                        placeholder="Enter UTR number"
+                        value={utr}
+                        onChange={(e) => setUtr(e.target.value)}
+                      />
 
-    <button onClick={submitUTR}>
-      Submit Payment
-    </button>
-  </div>
-)}
+                      <br /><br />
+
+                      <button onClick={submitUTR}>
+                        Submit Payment
+                      </button>
+                    </div>
+                  )}
 
                   {/* DOWNLOAD */}
-                 {isLogged && order?.status === "PAID" && (
+                  {isLogged && order?.status === "PAID" && (
                     <button
                       disabled={loadingDownloadId === p._id}
                       onClick={() =>
@@ -190,11 +196,9 @@ const submitUTR = async () => {
 
                 </div>
               </div>
-
             </div>
           );
         })}
-
       </div>
     </div>
   );

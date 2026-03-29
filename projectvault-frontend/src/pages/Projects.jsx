@@ -39,7 +39,7 @@ export default function Projects() {
   // 🔥 LOGIN CHECK + BUY
   const isLoggedIn = () => !!localStorage.getItem("token");
 const handleBuy = async () => {
-
+console.log("BUY CLICKED"); 
   if (!isLoggedIn()) {
     alert("Please login first");
     window.location.href = "/login";
@@ -128,7 +128,7 @@ const submitUTR = async () => {
                     <button
                       disabled={loadingBuyId === p._id}
                       onClick={() => handleBuy(p._id)}
-                    >
+                    >buy
                       {loadingBuyId === p._id
                         ? "Processing..."
                         : order?.status === "REJECTED"
